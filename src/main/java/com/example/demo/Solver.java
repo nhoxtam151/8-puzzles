@@ -172,7 +172,8 @@ public class Solver {
       for (Map.Entry<Integer, Actions> action : actions.entrySet()) {
         //do action
         Node neighbor = neighbors(current, action.getValue());
-        // add newNode into neighbors
+        
+        //contains work with pointer by default, so that i have to override equals and hashcode for it because stackoverflow say that hehe :>
         if (neighbor != null && !open.contains(neighbor) && !closed.contains(neighbor)) {
 
 
