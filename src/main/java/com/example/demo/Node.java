@@ -1,12 +1,13 @@
 package com.example.demo;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
-public class Node {
+public class Node implements Comparable<Node> {
 
   int[][] value;
-  List<Node> neighbors;
-  List<Actions> actions;
+  List<Node> neighbors = new LinkedList<>();
   Actions parentAction;
   Node parentNode;
 
@@ -28,7 +29,6 @@ public class Node {
         if(value[i][j] != goal.value[i][j] && value[i][j] != 0)
         {
           missPlaced++;
-          System.out.print(value[i][j]);
         }
       }
     }
@@ -41,5 +41,25 @@ public class Node {
   }
 
 
+  @Override
+  public int compareTo(Node o) {
+    return this.calculateF() - o.calculateF();
+  }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Node)) {
+      return false;
+    }
+    Node node = (Node) o;
+    return Arrays.deepEquals(value, node.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Arrays.deepHashCode(value);
+  }
 }
