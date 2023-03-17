@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.PriorityQueue;
+import java.util.Stack;
 
 public class Solver {
 
@@ -139,15 +140,15 @@ public class Solver {
     return null;
   }
 
-  void printParent(Node goal) {
-    Node current = goal;
-    while (current != null) {
-      printMatrix(current);
-      System.out.println();
-      current = current.parentNode;
-    }
-  }
 
+
+  void printParent(Node goal) {
+    if(goal == null)
+      return;
+    printParent(goal.parentNode);
+    printMatrix(goal);
+    System.out.println();
+  }
   public void solveGreedyBFS(Node initialNode, Node goal) {
     PriorityQueue<Node> open = new PriorityQueue<>();
     HashSet<Node> closed = new HashSet<>();
