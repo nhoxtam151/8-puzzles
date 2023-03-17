@@ -11,7 +11,7 @@ public class Node {
   Node parentNode;
 
   int missPlaced;
-  int g;
+  int g = 0;
   int f;
 
   public Node(int[][] value, Actions parentAction, Node parentNode) {
