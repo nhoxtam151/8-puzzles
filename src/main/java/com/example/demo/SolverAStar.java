@@ -1,16 +1,13 @@
 package com.example.demo;
 
-import java.security.spec.RSAOtherPrimeInfo;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.PriorityQueue;
-import java.util.Stack;
 
-public class Solver {
+public class SolverAStar {
 
   public static void main(String[] args) {
 
@@ -23,7 +20,7 @@ public class Solver {
     Node init = new Node(tiles, null, null);
     Node des = new Node(goal, null, null);
 
-    Solver solver = new Solver();
+    SolverAStar solver = new SolverAStar();
     solver.solveGreedyBFS(init, des);
 
 
@@ -38,14 +35,6 @@ public class Solver {
       System.out.println();
     }
   }
-
-  public void printPositionOfZero(int[] position) {
-    int n = position.length;
-    for (int i = 0; i < n; i++) {
-      System.out.print(position[i] + " ");
-    }
-  }
-
 
   public int[] findPositionOfZero(Node node) {
     int[] positionOfZero = new int[2];
@@ -83,13 +72,15 @@ public class Solver {
     final int columnOfZeroMinusOne = columnOfZero - 1;
     final int columnOfZeroPlusOne = columnOfZero + 1;
 
+    int[][] value = deepCopy(current.value);
+
     switch (action) {
       case Up:
         try {
-          Node node = new Node(deepCopy(current.value), Actions.Up, current);
-          int tempValue = node.value[rowOfZero][columnOfZero];
-          node.value[rowOfZero][columnOfZero] = node.value[rowOfZeroMinusOne][columnOfZero];
-          node.value[rowOfZeroMinusOne][columnOfZero] = tempValue;
+          int tempValue = value[rowOfZero][columnOfZero];
+          value[rowOfZero][columnOfZero] = value[rowOfZeroMinusOne][columnOfZero];
+          value[rowOfZeroMinusOne][columnOfZero] = tempValue;
+          Node node = new Node(value, Actions.Up, current);
           node.g = current.g + 1;
           node.parentNode = current;
           return node;
@@ -99,12 +90,12 @@ public class Solver {
         }
       case Down:
         try {
-          Node node = new Node(deepCopy(current.value), Actions.Down, current);
-          int tempValue = node.value[rowOfZero][columnOfZero];
-          node.value[rowOfZero][columnOfZero] = node.value[rowOfZeroPlusOne][columnOfZero];
-          node.value[rowOfZeroPlusOne][columnOfZero] = tempValue;
+          int tempValue = value[rowOfZero][columnOfZero];
+          value[rowOfZero][columnOfZero] = value[rowOfZeroPlusOne][columnOfZero];
+          value[rowOfZeroPlusOne][columnOfZero] = tempValue;
+          Node node = new Node(value, Actions.Down, current);
           node.g = current.g + 1;
-          node.parentNode = current;
+
           return node;
         } catch (IndexOutOfBoundsException ie) {
           ie.getMessage();
@@ -112,13 +103,12 @@ public class Solver {
         }
       case Left:
         try {
-          Node node = new Node(deepCopy(current.value), Actions.Left, current);
-          int tempValue = node.value[rowOfZero][columnOfZero];
-          node.value[rowOfZero][columnOfZero] = node.value[rowOfZero][columnOfZeroMinusOne];
-          node.value[rowOfZero][columnOfZeroMinusOne] = tempValue;
-
+          int tempValue = value[rowOfZero][columnOfZero];
+          value[rowOfZero][columnOfZero] = value[rowOfZero][columnOfZeroMinusOne];
+          value[rowOfZero][columnOfZeroMinusOne] = tempValue;
+          Node node = new Node(value, Actions.Left, current);
           node.g = current.g + 1;
-          node.parentNode = current;
+
           return node;
         } catch (IndexOutOfBoundsException ie) {
           ie.getMessage();
@@ -126,12 +116,12 @@ public class Solver {
         }
       case Right:
         try {
-          Node node = new Node(deepCopy(current.value), Actions.Right, current);
-          int tempValue = node.value[rowOfZero][columnOfZero];
-          node.value[rowOfZero][columnOfZero] = node.value[rowOfZero][columnOfZeroPlusOne];
-          node.value[rowOfZero][columnOfZeroPlusOne] = tempValue;
+          int tempValue = value[rowOfZero][columnOfZero];
+          value[rowOfZero][columnOfZero] = value[rowOfZero][columnOfZeroPlusOne];
+          value[rowOfZero][columnOfZeroPlusOne] = tempValue;
+
+          Node node = new Node(value, Actions.Right, current);
           node.g = current.g + 1;
-          node.parentNode = current;
           return node;
         } catch (IndexOutOfBoundsException ie) {
           ie.getMessage();
@@ -145,15 +135,16 @@ public class Solver {
   }
 
 
-
   void printParent(Node goal) {
-    if(goal == null)
+    if (goal == null) {
       return;
+    }
     printParent(goal.parentNode);
-
+    System.out.println("State " + goal.id);
     printMatrix(goal);
     System.out.println();
   }
+
   public void solveGreedyBFS(Node initialNode, Node goal) {
     PriorityQueue<Node> open = new PriorityQueue<>(
         Comparator.comparingInt(Node::calculateF));
@@ -168,34 +159,32 @@ public class Solver {
     actions.put(3, Actions.Left);
     actions.put(4, Actions.Right);
 
+    int id = initialNode.id;
     while (!open.isEmpty()) {
       Node current = open.poll();
-
-      if (Arrays.deepEquals(current.value, goal.value)) {
-        printParent(current);
-        return;
-      }
       //check the action
+
       for (Map.Entry<Integer, Actions> action : actions.entrySet()) {
         //do action
         Node neighbor = neighbors(current, action.getValue());
-        
-        //contains work with pointer by default, so that i have to override equals and hashcode for it because stackoverflow say that hehe :>
+        // add newNode into neighbors
         if (neighbor != null && !open.contains(neighbor) && !closed.contains(neighbor)) {
-
-
+          neighbor.id = ++id;
           neighbor.calculateMissPlaced(goal);
           neighbor.calculateF();
+
+          if (Arrays.deepEquals(neighbor.value, goal.value)) {
+
+            printParent(neighbor);
+            return;
+          }
           current.neighbors.add(neighbor);
+
         }
       }
-      //after create neighbors by action then will find out the one that have minimum  F value
-//      Node minF = current.neighbors.stream().min(Comparator.comparing(Node::calculateF))
-//          .orElseThrow(NoSuchElementException::new);
 
       closed.add(current);
-
-      for(Node neighbor : current.neighbors) {
+      for (Node neighbor : current.neighbors) {
         open.add(neighbor);
       }
 
