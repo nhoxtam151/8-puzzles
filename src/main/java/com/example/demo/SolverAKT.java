@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-public class SolverAStar {
+public class SolverAKT {
 
   public static void main(String[] args) {
 
@@ -20,8 +20,8 @@ public class SolverAStar {
     Node init = new Node(tiles, null, null);
     Node des = new Node(goal, null, null);
 
-    SolverAStar solver = new SolverAStar();
-    solver.solveGreedyBFS(init, des);
+    SolverAKT solver = new SolverAKT();
+    solver.solveAKT(init, des);
 
 
   }
@@ -145,7 +145,7 @@ public class SolverAStar {
     System.out.println();
   }
 
-  public void solveGreedyBFS(Node initialNode, Node goal) {
+  public void solveAKT(Node initialNode, Node goal) {
     PriorityQueue<Node> open = new PriorityQueue<>(
         Comparator.comparingInt(Node::calculateF));
     HashSet<Node> closed = new HashSet<>();
