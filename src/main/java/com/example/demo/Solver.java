@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.security.spec.RSAOtherPrimeInfo;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,9 +14,12 @@ public class Solver {
 
   public static void main(String[] args) {
 
-    int[][] tiles = {{4, 1, 3}, {5, 7, 6}, {2, 0, 8}};
-    int[][] goal = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
+//
+//    int[][] tiles = {{4, 1, 3}, {5, 7, 6}, {2, 0, 8}};
+//    int[][] goal = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
 
+    int[][] tiles = {{2, 8, 3}, {1, 6, 4}, {7, 0, 5}};
+    int[][] goal = {{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
     Node init = new Node(tiles, null, null);
     Node des = new Node(goal, null, null);
 
@@ -146,11 +150,13 @@ public class Solver {
     if(goal == null)
       return;
     printParent(goal.parentNode);
+
     printMatrix(goal);
     System.out.println();
   }
   public void solveGreedyBFS(Node initialNode, Node goal) {
-    PriorityQueue<Node> open = new PriorityQueue<>();
+    PriorityQueue<Node> open = new PriorityQueue<>(
+        Comparator.comparingInt(Node::calculateF));
     HashSet<Node> closed = new HashSet<>();
 
     initialNode.calculateMissPlaced(goal);
@@ -178,6 +184,7 @@ public class Solver {
 
 
           neighbor.calculateMissPlaced(goal);
+          neighbor.calculateF();
           current.neighbors.add(neighbor);
         }
       }

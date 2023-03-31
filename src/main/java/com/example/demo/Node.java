@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Node implements Comparable<Node> {
 
+  int id;
   int[][] value;
   List<Node> neighbors = new LinkedList<>();
   Actions parentAction;
@@ -19,20 +20,19 @@ public class Node implements Comparable<Node> {
     this.value = value;
     this.parentAction = parentAction;
     this.parentNode = parentNode;
+
   }
 
-  public int  calculateMissPlaced(Node goal) {
+  public void calculateMissPlaced(Node goal) {
     int n = goal.value.length;
-    for(int i = 0; i < n; i++)
-    {
-      for(int j = 0; j < n; j++) {
-        if(value[i][j] != goal.value[i][j] && value[i][j] != 0)
-        {
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        if (value[i][j] != goal.value[i][j] && value[i][j] != 0) {
           missPlaced++;
         }
       }
     }
-    return missPlaced;
+
   }
 
   public int calculateF() {
