@@ -174,7 +174,6 @@ public class SolverAStar {
           neighbor.calculateF();
 
           if (Arrays.deepEquals(neighbor.value, goal.value)) {
-
             printParent(neighbor);
             return;
           }
