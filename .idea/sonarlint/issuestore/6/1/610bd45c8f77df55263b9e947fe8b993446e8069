@@ -1,0 +1,16 @@
+
+^
+java:S2259_"CA "NullPointerException" could be thrown; "value" is nullable here.(‘”¶èÿÿÿÿÿ
+^
+java:S2259l"CA "NullPointerException" could be thrown; "value" is nullable here.(‘”¶èÿÿÿÿÿ
+^
+java:S2259S"CA "NullPointerException" could be thrown; "value" is nullable here.(‘”¶èÿÿÿÿÿ
+^
+java:S2259y"CA "NullPointerException" could be thrown; "value" is nullable here.(‘”¶èÿÿÿÿÿ
+V	java:S125"<This block of commented-out lines of code should be removed.(Äø³Ôþÿÿÿÿ
+S	java:S106$"9Replace this use of System.out or System.err by a logger.(ÚòŠúÿÿÿÿ
+S	java:S106&"9Replace this use of System.out or System.err by a logger.(ªÓ¼áþÿÿÿÿ
+<
+java:S1168:"&Return an empty array instead of null.(¥¹ï
+O	java:S106‘"9Replace this use of System.out or System.err by a logger.(õÀãû
+T	java:S106“"9Replace this use of System.out or System.err by a logger.(ªÓ¼áþÿÿÿÿ

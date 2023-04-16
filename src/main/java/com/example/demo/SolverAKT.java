@@ -17,6 +17,7 @@ public class SolverAKT {
 
     int[][] tiles = {{2, 8, 3}, {1, 6, 4}, {7, 0, 5}};
     int[][] goal = {{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
+
     Node init = new Node(tiles, null, null);
     Node des = new Node(goal, null, null);
 
@@ -82,7 +83,6 @@ public class SolverAKT {
           value[rowOfZeroMinusOne][columnOfZero] = tempValue;
           Node node = new Node(value, Actions.Up, current);
           node.g = current.g + 1;
-          node.parentNode = current;
           return node;
         } catch (IndexOutOfBoundsException ie) {
           ie.getMessage();
@@ -162,7 +162,11 @@ public class SolverAKT {
     int id = initialNode.id;
     while (!open.isEmpty()) {
       Node current = open.poll();
-      //check the action
+      System.out.println();
+      System.out.println("Choose " + current.id);
+      printMatrix(current);
+      System.out.println("f = " + current.calculateF());
+      System.out.println();
 
       for (Map.Entry<Integer, Actions> action : actions.entrySet()) {
         //do action
@@ -188,6 +192,27 @@ public class SolverAKT {
         open.add(neighbor);
       }
 
+      System.out.println("Open {");
+      open.forEach(node -> {
+        System.out.println("[" + node.id + "]");
+        printMatrix(node);
+        System.out.println(
+            "g= " + node.g + " h = " + node.missPlaced + " f = " + node.calculateF());
+        System.out.println();
+        System.out.println();
+      });
+
+      System.out.println("}");
+      System.out.println();
+      System.out.println();
+      System.out.println("Closed { ");
+      closed.forEach(node -> {
+        System.out.println("[" + node.id + "]");
+        printMatrix(node);
+        System.out.println("f = " + node.calculateF());
+        System.out.println();
+      });
+      System.out.println("}");
     }
   }
 }

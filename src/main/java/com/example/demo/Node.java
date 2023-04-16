@@ -62,4 +62,16 @@ public class Node implements Comparable<Node> {
   public int hashCode() {
     return Arrays.deepHashCode(value);
   }
+
+  public void printMatrix(Node node) {
+    int n = node.value.length;
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        System.out.print(node.value[i][j] + " ");
+      }
+      System.out.println();
+    }
+  }
+
+
 }
